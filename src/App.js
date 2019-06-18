@@ -74,7 +74,7 @@ class App extends Component {
               bottomRow: height - (clarifaiFace.bottom_row * height)
             }
             })
-        this.displayFaceBox(box);     
+        this.displayFaceBox(this.state.box);     
 
       }    
     
