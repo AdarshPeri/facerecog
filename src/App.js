@@ -66,12 +66,15 @@ class App extends Component {
           let image = document.getElementById('inputimage');
           let width = Number(image.width);
           let height = Number(image.height);
-          return {
-           leftCol: clarifaiFace.left_col * width,
-           topRow: clarifaiFace.top_row * height,
-           rightCol: width - (clarifaiFace.right_col * width),
-           bottomRow: height - (clarifaiFace.bottom_row * height)
-                 }
+          this.setState({box: 
+            {
+              leftCol: clarifaiFace.left_col * width,
+              topRow: clarifaiFace.top_row * height,
+              rightCol: width - (clarifaiFace.right_col * width),
+              bottomRow: height - (clarifaiFace.bottom_row * height)
+            }
+            })
+        this.displayFaceBox(box);     
 
       }    
     
@@ -110,7 +113,7 @@ class App extends Component {
           })
           .catch(console.log)
         }
-          this.displayFaceBox(this.calculateFaceLocation(response))
+          this.calculateFaceLocation(response)
     })
       .catch(err=> console.log(err))
   }
