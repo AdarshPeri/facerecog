@@ -10,9 +10,6 @@ import './App.css';
 import Particles from 'react-particles-js';
 
 
-
-
-
 const particlesOptions = {
 
                 particles: {
@@ -29,7 +26,8 @@ const particlesOptions = {
 const initialState= {
       input: '',
       imageUrl: '',
-      box: {},
+      clarifaiFaces :[],
+      realFaces :[],  
       route: 'signin',
       isSignedIn: false,
       user: {
@@ -60,30 +58,53 @@ class App extends Component {
   }
 
   calculateFaceLocation= (data) => {
-      for(let i =0; i<data.outputs[0].data.regions.length; i++)
+     const data1 = data.outputs[0].data.regions;
+      for(let i =0; i<data1.length; i++)
       {
-          let clarifaiFace = data.outputs[0].data.regions[i].region_info.bounding_box;
+          this.setState(state => {
+              state.clarifaiFaces.push(data1[i].region_info.bounding_box);
+          })
+           
+          // let image = document.getElementById('inputimage');
+          // let width = Number(image.width);
+          // let height = Number(image.height);
+          // this.setState({box: 
+          //   {
+          //     leftCol: clarifaiFace.left_col * width,
+          //     topRow: clarifaiFace.top_row * height,
+          //     rightCol: width - (clarifaiFace.right_col * width),
+          //     bottomRow: height - (clarifaiFace.bottom_row * height)
+          //   }
+          //   })
+       } this.displayFaceBox();     
+
+      }    
+
+
+  displayFaceBox = () => {
+          
+
           let image = document.getElementById('inputimage');
           let width = Number(image.width);
           let height = Number(image.height);
-          this.setState({box: 
+          var leng = this.state.clarifaiFaces.length;
+          for(let i =0; i<leng; i++)
+          {
+            let box =  
             {
-              leftCol: clarifaiFace.left_col * width,
-              topRow: clarifaiFace.top_row * height,
-              rightCol: width - (clarifaiFace.right_col * width),
-              bottomRow: height - (clarifaiFace.bottom_row * height)
+              leftCol: this.state.clarifaiFaces[i].left_col * width,
+              topRow: this.state.clarifaiFaces[i].top_row * height,
+              rightCol: width - (this.state.clarifaiFaces[i].right_col * width),
+              bottomRow: height - (this.state.clarifaiFaces[i].bottom_row * height)
             }
-            })
-        this.displayFaceBox(this.state.box);     
-
-      }    
-    
-  }
-
-
-  displayFaceBox = (box) => {
-    this.setState({box: box});
+              this.setState(state => {
+              state.realFaces.push(box);
+          })
+        }
+      
+   
   } 
+
   onInputChange = (event) => {
     this.setState({input: event.target.value});
   }
@@ -113,6 +134,7 @@ class App extends Component {
           })
           .catch(console.log)
         }
+          
           this.calculateFaceLocation(response)
     })
       .catch(err=> console.log(err))
@@ -130,7 +152,7 @@ class App extends Component {
   }
 
 render(){
-  const {isSignedIn,imageUrl, route, box} = this.state;
+  const {isSignedIn,imageUrl, route, realFaces} = this.state;
   return (
      <div className="App">
      <Particles className='particles'
@@ -145,7 +167,7 @@ render(){
       onInputChange={this.onInputChange} 
       onButtonSubmit={this.onButtonSubmit}
       />
-      <FaceRecognition box={box} imageUrl={imageUrl}/>
+      <FaceRecognition realFaces={realFaces} imageUrl={imageUrl}/>
       </div>
       : (
           route === 'signin'
