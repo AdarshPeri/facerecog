@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "clarifai": "^2.9.0",
-    "fsevents": "1.2.8",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-particles-js": "^2.6.0",
@@ -21,6 +20,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "optionalDependencies": { "fsevents": "1.2.8"},
   "browserslist": {
     "production": [
       ">0.2%",
