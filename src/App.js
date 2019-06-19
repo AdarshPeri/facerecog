@@ -8,6 +8,7 @@ import Signin from './Components/Signin/Signin';
 import Register from './Components/Register/Register';
 import './App.css';
 import Particles from 'react-particles-js';
+import Home1 from './Components/Home1';
 
 
 const particlesOptions = {
@@ -28,7 +29,7 @@ const initialState= {
       imageUrl: '',
       clarifaiFaces :[],
       realFaces :[],  
-      route: 'signin',
+      route: 'home1',
       isSignedIn: false,
       user: {
         id: '',
@@ -64,18 +65,6 @@ class App extends Component {
           this.setState(state => {
               state.clarifaiFaces.push(data1[i].region_info.bounding_box);
           })
-           
-          // let image = document.getElementById('inputimage');
-          // let width = Number(image.width);
-          // let height = Number(image.height);
-          // this.setState({box: 
-          //   {
-          //     leftCol: clarifaiFace.left_col * width,
-          //     topRow: clarifaiFace.top_row * height,
-          //     rightCol: width - (clarifaiFace.right_col * width),
-          //     bottomRow: height - (clarifaiFace.bottom_row * height)
-          //   }
-          //   })
        } this.displayFaceBox();     
 
       }    
@@ -110,17 +99,17 @@ class App extends Component {
   }
 
   onButtonSubmit = () => {
-    this.setState({imageUrl: this.state.input});
+    this.setState({imageUrl:this.state.input});
     fetch('https://secret-sea-63371.herokuapp.com/imageurl',{
       method:'post',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        input: this.state.input
+      input: this.state.input
       })
     })
     .then(response => response.json())
     .then(response => {
-        if(response) {
+        if(response && this.state.input) {
           fetch('https://secret-sea-63371.herokuapp.com/image',{
             method: 'put',
             headers: {'Content-Type':'application/json'},
@@ -140,16 +129,22 @@ class App extends Component {
       .catch(err=> console.log(err))
   }
   
-  onRouteChange= (route) => {
-    if(route === 'signout') {
+  onRouteChange= (route1) => {
+    if(route1 === 'signout') {
       this.setState(initialState)
     }
-    else if(route === 'home')
+    else if(route1 === 'home')
     {
-      this.setState({isSignedIn: true})
+      this.setState({isSignedIn: true, route:'home',imageUrl:''})
     }
-    this.setState({route: route});
+    else if(route1=== 'home1')
+    {
+      this.setState({isSignedIn:false, route:'home1'})
+    }
+    else {
+    this.setState({route: route1});
   }
+}
 
 render(){
   const {isSignedIn,imageUrl, route, realFaces} = this.state;
@@ -172,8 +167,11 @@ render(){
       : (
           route === 'signin'
           ? <Signin  loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+          :(
+          route === 'home1' 
+          ? <Home1 onRouteChange={this.onRouteChange}/>
           : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
-        )
+        ))
       }
    </div>
     );

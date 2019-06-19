@@ -21,6 +21,9 @@ class Register extends React.Component {
     }
     onPasswordChange = (event) => {
     	this.setState({password: event.target.value})
+    	if(event.keyCode === 13) {
+    		this.onSubmitSignIn()
+    	}
     }
     onSubmitSignIn = () => {
     	fetch('https://secret-sea-63371.herokuapp.com/register',{
@@ -49,7 +52,7 @@ class Register extends React.Component {
 		<main className="pa4 black-80">
 		<div className="measure ">
 		<fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-		<legend className="f1 fw6 ph0 mh0">Sign In</legend>
+		<legend className="f1 fw6 ph0 mh0">Sign Up</legend>
 		<div className="mt3">
 		<label className="db fw6 lh-copy f6" htmlFor="name">Name</label>
 		<input 
@@ -65,7 +68,7 @@ class Register extends React.Component {
 		<div className="mv3">
 		<label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
 		<input 
-		 onChange= {this.onPasswordChange}
+		 onKeyUp= {this.onPasswordChange}
 		className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="password" name="password"  id="password" />
 		</div>
 		</fieldset>

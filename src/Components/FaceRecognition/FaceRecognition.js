@@ -2,9 +2,7 @@ import React,{Component} from 'react';
 import './FaceRecognition.css';
 
 class FaceRecognition extends Component {
-		constructor(props){
-			super(props);
-		}
+		
 
 
 		render(){
