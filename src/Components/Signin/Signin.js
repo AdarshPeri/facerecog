@@ -17,7 +17,6 @@ class Signin extends Component {
     onPasswordChange = (event) => {
     	this.setState({signInPassword: event.target.value})
     	if(event.keyCode === 13) {
-    		console.log(event.keyCode)
     		this.onSubmitSignIn()
     	}
     }
